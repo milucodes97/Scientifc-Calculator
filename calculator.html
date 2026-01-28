@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body{
+            background-color: aqua;
+        }
+        #display {
+    width: 90%;
+    height: 50px;
+    background-color: white;
+    margin: 10px auto;
+    color: black;
+    font-family: monospace;
+    
+    /* This makes the font roughly 5% of the screen width */
+    font-size: 1vw; 
+    
+    /* Centers text vertically and horizontally */
+    display: flex;
+    align-items: center; 
+    justify-content: flex-end; /* Common for calculators */
+    padding-right: 10px;
+    box-sizing: border-box; 
+}
+        button{
+            width:15%;
+            height:15%;
+            background-color: white;
+            border-color: white;
+
+        }
+        .operator{
+            color:white;
+            background-color: red;
+            border-color: red;
+        }
+        .calc {
+    text-align: center;
+    background-color: blue;
+    border-radius: 30px;
+    width: 75%;
+    /* Add this line */
+    margin: 0 auto; 
+    box-shadow: 5px 10px 10px rgba(0, 0, 0, 0.3);
+    font-family: 'Arial', sans-serif;
+    color:white
+}
+    </style>
+</head>
+<body>
+    <script>
+        let ans = 0;
+        function Add(x , y) {
+            let i = 0;
+            let j = 0;
+            if (x % 1 != 0){
+                i = x.toString().split(".")[1].length;
+            }
+            if (y % 1 != 0){
+                j = y.toString().split(".")[1].length;
+            }
+            let baseNum = Math.pow(10, Math.max(i, j));
+            return (x * baseNum + y * baseNum) / baseNum;
+        }
+        function Mult(x , y){
+            let i = 0;
+            let j = 0;
+            if (x % 1 != 0){
+                i = x.toString().split(".")[1].length;
+            }
+            if (y % 1 != 0){
+                j = y.toString().split(".")[1].length;
+            }
+            return (x * Math.pow(10, i)) * (y * Math.pow(10, j)) / Math.pow(10, i + j);
+        }
+        function binary(x){
+            let F = 1;
+            let FS = "";
+            let IS = "";
+            let JS = "";
+            let i = x;
+            let j = 0;
+            let S = "";
+            while (i >= 0) {
+                if (Math.round(F)!= 1) {
+                    FS = Math.round(F);
+                }else{
+                    FS = "";
+                }
+                if (i == 0){
+                    IS = "";
+                }else if (i == 1){
+                    IS = "X"
+                }else{
+                    IS = "X<sup>" + i + "</sup> ";
+                }
+                if (j == 0){
+                    JS = "";
+                }else if (j == 1){
+                    JS = "Y"
+                }else{
+                    JS = "Y<sup>" + j + "</sup> ";
+                }
+                F = Math.round(Mult(F , Mult(i , 1 / (j + 1))));
+                i--;
+                if (i >= 0){
+                    S += FS + IS + JS + " +";
+                }else{
+                    S += FS + IS + JS;
+                }
+                j++;
+            }
+            return S;
+        }
+        function cos(x){
+            return Math.cos(x);
+        }
+        function rad_to_deg(x){
+            return x * (180 / Math.PI);
+        }
+        function deg_to_rad(x){
+            return x * (Math.PI / 180);
+        }
+        const pi = Math.PI
+        const e = Math.E
+        function sin(x){
+            return Math.sin(x);
+        }
+        function QN(a , b ,c){
+            if (b * b - 4 * a * c < 0){
+                return -b / (2 * a) + " - " + sqrt(-(b * b - 4 * a * c)) / (2 * a) + "i";
+            }else{
+                return (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
+            }
+        }
+        function QX(a , b ,c){
+            if (b * b - 4 * a * c < 0){
+                return -b / (2 * a) + " + " + sqrt(-(b * b - 4 * a * c)) / (2 * a) + "i";
+            }else{
+                return (-b + sqrt(b * b - 4 * a * c)) / (2 * a);
+            }
+        }
+        function tan(x){
+            return Math.tan(x);
+        }
+        function sec(x){
+            return 1 / Math.cos(x);
+        }
+        function csc(x){
+            return 1 / Math.sin(x);
+        }
+        function cot(x){
+            return 1 / Math.tan(x);
+        }
+        function cosh(x){
+            return Math.cosh(x);
+        }
+        function sinh(x){
+            return Math.sinh(x);
+        }
+        function tanh(x){
+            return Math.tanh(x);
+        }
+        function sech(x){
+            return 1 / Math.cosh(x);
+        }
+        function csch(x){
+            return 1 / Math.sinh(x);
+        }
+        function coth(x){
+            return 1 / Math.tanh(x);
+        }
+        function acos(x){
+            return Math.acos(x);
+        }
+        function asin(x){
+            return Math.asin(x);
+        }
+        function atan(x){
+            return Math.atan(x);
+        }
+        function asec(x){
+            return Math.acos(1 / x);
+        }
+        function acsc(x){
+            return Math.asin(1 / x);
+        }
+        function acot(x){
+            return Math.atan(1 / x);
+        }
+        function acosh(x){
+            return Math.acosh(x);
+        }
+        function asinh(x){
+            return Math.asinh(x);
+        }
+        function atanh(x){
+            return Math.atanh(x);
+        }
+        function asech(x){
+            return Math.acosh(1 / x);
+        }
+        function acsch(x){
+            return Math.asinh(1 / x);
+        }
+        function acoth(x){
+            return Math.atanh(1 / x);
+        }
+        function ln(x){
+            return Math.log(x);
+        }
+        function sqrt(x){
+            return Math.sqrt(x);
+        }
+        function exp(x){
+            return Math.exp(x);
+        }
+        function log(x, base){
+            return Math.log(x) / Math.log(base);
+        }
+        function log10(x){
+            return Math.log10(x);
+        }
+function PEMDAS(expr) {
+    // 1. Define Tiers/Precedence
+    const precedence = {
+        '+': 1, '-': 1,
+        '*': 2, '/': 2,
+        '^': 3
+    };
+
+    // 2. Tokenizer (includes support for pi and e)
+    const tokens = expr.replace(/\s+/g, '').match(/([0-9.]+|[a-z_]+[0-9]*|[+\-*/^(),])/g);
+    let i = 0;
+
+    function parseExpression() {
+        let nodes = [parsePrimary()];
+        while (i < tokens.length && "+-*/^".includes(tokens[i])) {
+            let op = tokens[i++];
+            let nextNode = parsePrimary();
+            nodes.push(op, nextNode);
+        }
+        return evaluateTiers(nodes);
+    }
+
+    function parsePrimary() {
+        let token = tokens[i++];
+
+        if (token === '(') {
+            let result = parseExpression();
+            i++; // Skip ')'
+            return result;
+        }
+
+        // Handle Constants
+        if (token === 'pi') return pi;
+        if (token === 'e') return e;
+
+        // Tier 4: Functions
+        if (isNaN(token) && !"+-*/^()".includes(token)) {
+            let funcName = token;
+            i++; // Skip '('
+            let args = [];
+            while (tokens[i] !== ')') {
+                args.push(parseExpression());
+                if (tokens[i] === ',') i++; 
+            }
+            i++; // Skip ')'
+            return executeFunction(funcName, args);
+        }
+
+        return parseFloat(token);
+    }
+
+    function executeFunction(name, args) {
+        // Direct mapping to your provided functions
+        const funcMap = {
+            'Add': Add, 'Mult': Mult, 'cos': cos, 'sin': sin, 'tan': tan,
+            'sec': sec, 'csc': csc, 'cot': cot, 'cosh': cosh, 'sinh': sinh,
+            'tanh': tanh, 'sech': sech, 'csch': csch, 'coth': coth,
+            'acos': acos, 'asin': asin, 'atan': atan, 'asec': asec,
+            'acsc': acsc, 'acot': acot, 'acosh': acosh, 'asinh': asinh,
+            'atanh': atanh, 'asech': asech, 'acsch': acsch, 'acoth': acoth,
+            'rad_to_deg': rad_to_deg, 'deg_to_rad': deg_to_rad,
+            'ln': ln, 'sqrt': sqrt, 'exp': exp, 'log': log, 'log10': log10,
+            "floor":Math.floor, "ceil":Math.ceil, "round":Math.round , "Quadmin":QN , "Quadmax":QX
+        };
+        return funcMap[name](...args);
+    }
+
+    function evaluateTiers(nodes) {
+        // Tier 3: Exponents (a ^ b)
+        for (let j = 1; j < nodes.length; j += 2) {
+            if (nodes[j] === '^') {
+                let res = Math.pow(nodes[j - 1], nodes[j + 1]);
+                nodes.splice(j - 1, 3, res);
+                j -= 2;
+            }
+        }
+
+        // Tier 2: Multiplication & Division (using Mult(a, 1/b))
+        for (let j = 1; j < nodes.length; j += 2) {
+            if (nodes[j] === '*' || nodes[j] === '/') {
+                let res = (nodes[j] === '*') 
+                    ? Mult(nodes[j - 1], nodes[j + 1]) 
+                    : Mult(nodes[j - 1], 1 / nodes[j + 1]); // Division logic
+                nodes.splice(j - 1, 3, res);
+                j -= 2;
+            }
+        }
+
+        // Tier 1: Addition & Subtraction (using Add(a, -b))
+        let total = nodes[0];
+        for (let j = 1; j < nodes.length; j += 2) {
+            if (nodes[j] === '+') {
+                total = Add(total, nodes[j + 1]);
+            } else if (nodes[j] === '-') {
+                total = Add(total, -nodes[j + 1]); // Subtraction logic
+            }
+        }
+        return total;
+    }
+
+    return parseExpression();
+}
+    </script>
+    <div class="calc">
+        <h1>Calculator</h1>
+        <div id="display"></div>
+        <br>
+        <button onclick="display.innerHTML+='1'">1</button>
+        <button onclick="display.innerHTML+='2'">2</button>
+        <button onclick="display.innerHTML+='3'">3</button>
+        <button onclick="display.innerHTML+=' + '" class="operator">+</button>
+        <button onclick="display.innerHTML+='('">(</button><br>
+        <button onclick="display.innerHTML+='4'">4</button>
+        <button onclick="display.innerHTML+='5'">5</button>
+        <button onclick="display.innerHTML+='6'">6</button>
+        <button onclick="display.innerHTML+=' - '" class="operator">-</button>
+        <button onclick="display.innerHTML+=')'">)</button><br>
+        <button onclick="display.innerHTML+='4'">4</button>
+        <button onclick="display.innerHTML+='5'">5</button>
+        <button onclick="display.innerHTML+='6'">6</button>
+        <button onclick="display.innerHTML+=' * '" class="operator">*</button>
+        <button onclick="display.innerHTML+='.'">.</button><br>
+        <button onclick="display.innerHTML+='7'">7</button>
+        <button onclick="display.innerHTML+='8'">8</button>
+        <button onclick="display.innerHTML+='9'">9</button>
+        <button onclick="display.innerHTML+=' / '" class="operator">/</button>
+        <button onclick="display.innerHTML+=','">,</button><br>
+        <button onclick="display.innerHTML+='0'">0</button>
+        <button onclick="display.innerHTML+='pi'" class="operator">π</button>
+        <button onclick="display.innerHTML+='e'" class="operator">e</button>
+        <button onclick="display.innerHTML+=' ^ '" class="operator">^</button>
+        <button onclick="display.innerHTML=''" class="operator">C</button><br>
+        <button onclick="display.innerHTML+='sqrt('" class="operator">√</button>
+        <button onclick="display.innerHTML+='ln('" class="operator">ln</button>
+        <button onclick="display.innerHTML+='log10('" class="operator">log<sub>10</sub>
+        <button onclick="display.innerHTML = PEMDAS(display.innerHTML)" class="operator">=</button>
+        <button onclick="display.innerHTML = display.innerHTML.slice(0 , -1)" class="operator">DEL</button><br>
+        <button onclick="display.innerHTML+='floor('" class="operator">floor</button>
+        <button onclick="display.innerHTML+='round('" class="operator">round</button>
+        <button onclick="display.innerHTML+='ceil('" class="operator">ceil</button>
+        <button onclick="display.innerHTML+='exp('" class="operator">exp</button>
+        <button onclick="display.innerHTML+='ans'" class="operator">ans</button><br>
+        <button onclick="display.innerHTML = binary(eval(display.innerHTML))" class="operator">(X+Y)<sup>N</sup></button>
+    </div>
+</body>
+</html>

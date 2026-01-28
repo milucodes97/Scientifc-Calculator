@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced PEMDAS Calculator</title>
+    <style>
+        body {
+            background-color: aqua;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .calc {
+            text-align: center;
+            background-color: blue;
+            border-radius: 30px;
+            width: 85%;
+            max-width: 500px;
+            padding: 20px;
+            box-shadow: 5px 10px 10px rgba(0, 0, 0, 0.3);
+            color: white;
+        }
+
+        #display {
+            width: 95%;
+            min-height: 80px;
+            max-height: 350px;
+            background-color: white;
+            margin: 10px auto;
+            color: black;
+            padding: 15px;
+            box-sizing: border-box;
+            word-wrap: break-word;
+            display: block;
+            white-space: pre-wrap;
+            text-align: right;
+            font-size: 22px;
+            border-radius: 15px;
+            overflow-y: auto;
+            line-height: 1.4;
+        }
+
+        /* Prevent superscript from adding vertical space */
+        #display sup {
+            vertical-align: baseline;
+            position: relative;
+            top: -0.5em;
+            font-size: 0.7em;
+            line-height: 0;
+        }
+
+        .button-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        button {
+            width: 18%;
+            height: 45px;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+        button:active {
+            transform: scale(0.95);
+            background-color: #eee;
+        }
+        button:hover{
+            background-color:gainsboro
+        }
+        .operator {
+    /* Existing styles (background, border, etc.) */
+    background-color: red; 
+    border: 1px solid red;
+    color: white;
+
+    /* The Fading Effect */
+    /* Syntax: transition: [property] [duration] [timing-function]; */
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+        .operator:active {
+            color: white;
+            background-color: red;
+            border-color: red;
+        }
+
+.operator:hover {
+    background-color: rgb(176, 17, 17);
+    border-color: rgb(176, 17, 17);
+}
+        .fn-btn {
+            font-size: 11px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="calc">
+    <h1>Calculator</h1>
+    <div id="display"></div>
+    
+    <div class="button-grid">
+        <button onclick="addText('1')" title="Use '=' for calculations">1</button>
+        <button onclick="addText('2')" title="Use '=' for calculations">2</button>
+        <button onclick="addText('3')" title="Use '=' for calculations">3</button>
+        <button onclick="addText(' + ')" class="operator" title="Use '=' for calculations">+</button>
+        <button onclick="addText('(')" class="operator" title="Use '=' for calculations">(</button>
+
+        <button onclick="addText('4')" title="Use '=' for calculations">4</button>
+        <button onclick="addText('5')" title="Use '=' for calculations">5</button>
+        <button onclick="addText('6')" title="Use '=' for calculations">6</button>
+        <button onclick="addText(' - ')" class="operator" title="Use '=' for calculations">-</button>
+        <button onclick="addText(')')" title="Use '=' for calculations" class="operator">)</button>
+
+        <button onclick="addText('7')" title="Use '=' for calculations">7</button>
+        <button onclick="addText('8')" title="Use '=' for calculations">8</button>
+        <button onclick="addText('9')" title="Use '=' for calculations">9</button>
+        <button onclick="addText(' * ')" class="operator" title="Use '=' for calculations">*</button>
+        <button onclick="addText('.')" title="Use '=' for calculations">.</button>
+
+        <button onclick="addText('0')" title="Use '=' for calculations">0</button>
+        <button onclick="addText('π')" title="Use '=' for calculation, π approx= 3.14">π</button>
+        <button onclick="addText('e')" title="Use '=' for calculations, e approx= 2.72">e</button>
+        <button onclick="addText(' / ')" class="operator" title="Use '=' for calculations, this is an division operator">/</button>
+        <button onclick="addText(',')" class="operator fn-btn" title="Used for multivariable inputs in functions">,</button>
+
+        <button onclick="addText(' ^ ')" class="operator" title="Use '=' for calculations , this is an exponent operator">^</button>
+        <button onclick="clr()" class="operator" title="clears display">C</button>
+        <button onclick="addText('sqrt(')" class="operator" title="Use '=' for calculations, sqrt(x)=x^(1/2)">√</button>
+        <button onclick="addText('ln(')" class="operator" title="Use '=' for calculations, log base e">ln</button>
+        <button onclick="del()" class="operator" title="removes a previous part of a display, much like a delete on your keyboard">DEL</button>
+
+        <button onclick="addText('floor(')" class="operator fn-btn" title="Use '=' for calculations, it rounds down the value to an integer">floor</button>
+        <button onclick="addText('round(')" class="operator fn-btn" title="Use '=' for calculations, it rounds to the local integer">round</button>
+        <button onclick="addText('ceil(')" class="operator fn-btn" title="Use '=' for calculations, it rounds up the value to an integer">ceil</button>
+        <button onclick="addText('exp(')" class="operator fn-btn" title="Use '=' for calculations, exp(x)=e^x">exp</button>
+        <button onclick="addText('ans')" class="operator fn-btn" title="Use '=' for calculations, gets previous result">ans</button>
+
+        <button onclick="addText('Quadmin(')" class="operator fn-btn" title="Use '=Alg' for algebra ax^2+bx+c = 0 , x = Quadmin(a , b , c)">QUAD Min</button>
+        <button onclick="addText('Quadmax(')" class="operator fn-btn" title="Use '=Alg' for algebra ax^2+bx+c = 0 , x = Quadmax(a , b , c)">QUAD Max</button>
+        <button onclick="addText('ENTQUAD(')" class="operator fn-btn" title="Use '=Alg' for algebra ax^2+bx+c = 0 , x = ENTQUAD(a , b , c)">ENTQUAD</button>
+        <button onclick="solveBinomial()" class="operator fn-btn" title="onced pressed it treats N as integer, will give you the expanded formula for (X + Y) ^ N">(X+Y)<sup>N</sup></button>
+        <button onclick="solve()" class="operator">=</button>
+        <button onclick="addText('log10(')" class="operator fn-btn" title="Use '=' for calculations, log base 10">log</button>
+        <button onclick="addText('log(')" class="operator fn-btn" title="Use '=' for calculations for log(a,b)=log(a)/log(b)">log<sub>x</sub></button>
+        <button onclick="solveAlg()" class="operator" title="Use '=Alg' for algebra">=Alg</button>
+        <button onclick="display.innerHTML = Math.random()" class="operator" title = "returns a random number n where 0 ≤ n ≤ 1">Rand</button>
+        <button onclick="addText('abs(')" class="operator" title="Use '=' for calculations this does positive to positive, and negative to positive.">abs</button>
+
+        <button onclick="addText('-')">(-)</button>
+        <button onclick="RTD(display.innerHTML)" class="operator fn-btn" title = "Converts radians to degrees">RadToDeg</button>
+        <button onclick="DTR(display.innerHTML)" class="operator fn-btn" title = "Converts degrees to radians">DegToRad</button>
+        <button onclick="addText('cos(')" class="operator fn-btn"title="Use '=' for calculations, this is the cosine function">cos</button>
+        <button onclick="addText('sin(')" class="operator fn-btn"title="Use '=' for calculations, this is the sine function">sin</button>
+        <button onclick="addText('tan(')" class="operator fn-btn"title="Use '=' for calculations, this is the tangent function">tan</button>
+        <button onclick="addText('sec(')" class="operator fn-btn"title="Use '=' for calculations, this is the secant function">sec</button>
+
+        <button onclick="addText('csc(')" class="operator fn-btn"title="Use '=' for calculations, this is the cosecant function">csc</button>
+        <button onclick="addText('cot(')" class="operator fn-btn"title="Use '=' for calculations, this is the cotangent function">cot</button>
+        <button onclick="addText('acos(')" class="operator fn-btn"title="Use '=' for calculations, this is the inverse cosine function">cos<sup>-1</sup></button>
+        <button onclick="addText('asin(')" class="operator fn-btn"title="Use '=' for calculations, this is the inverse sine function">sin<sup>-1</sup></button>
+        <button onclick="addText('atan(')" class="operator fn-btn"title="Use '=' for calculations, this is the inverse tangent function">tan<sup>-1</sup></button>
+
+        <button onclick="addText('asec(')" class="operator fn-btn"title="Use '=' for calculations, this is the inverse secant function">sec<sup>-1</sup></button>
+        <button onclick="addText('acsc(')" class="operator fn-btn"title="Use '=' for calculations, this is the inverse cosecant function">csc<sup>-1</sup></button>
+        <button onclick="addText('acot(')" class="operator fn-btn"title="Use '=' for calculations, this is the inverse cotangent function">cot<sup>-1</sup></button>
+         <button onclick="addText('cos(')" class="operator fn-btn"title="Use '=' for calculations, this is the hyperbolic cosine function cosh(x)=(exp(x) + exp(-x)) / 2">cosh</button>
+        <button onclick="addText('sin(')" class="operator fn-btn"title="Use '=' for calculations, this is the hyperbolic sine function sinh(x)=(exp(x) - exp(-x)) / 2">sinh</button>
+
+        <button onclick="addText('tan(')" class="operator fn-btn"title="Use '=' for calculations, this is the hyperbolic tangent function tanh(x)=sinh(x) / cosh(x)">tanh</button>
+        <button onclick="addText('sec(')" class="operator fn-btn"title="Use '=' for calculations, this is the hyperbolic secant function sech(x)=1 / cosh(x)">sech</button>
+        <button onclick="addText('csc(')" class="operator fn-btn"title="Use '=' for calculations, this is the hyperbolic cosecant function csch(x)=1 / sinh(x)">csch</button>
+        <button onclick="addText('cot(')" class="operator fn-btn"title="Use '=' for calculations, this is the hyperbolic secant function coth(x)=cosh(x) / sinh(x)">coth</button>
+        <button onclick="addText('acos(')" class="operator fn-btn"title="Use '=' for calculations, this is the hyperbolic inverse cosine function">cosh<sup>-1</sup></button>
+
+        <button onclick="addText('asin(')" class="operator fn-btn"title="Use '=' for calculations, this is the hyperbolic inverse sine function">sinh<sup>-1</sup></button>
+        <button onclick="addText('atan(')" class="operator fn-btn"title="Use '=' for calculations, this is the hyperbolic inverse tangent function">tanh<sup>-1</sup></button>
+        <button onclick="addText('asec(')" class="operator fn-btn"title="Use '=' for calculations, this is the hyperbolic inverse secant function">sech<sup>-1</sup></button>
+        <button onclick="addText('acsc(')" class="operator fn-btn"title="Use '=' for calculations, this is the hyperbolic inverse cosecant function">csch<sup>-1</sup></button>
+        <button onclick="addText('acot(')" class="operator fn-btn"title="Use '=' for calculations, this is the hyperbolic inverse cotangent function">coth<sup>-1</sup></button>
+
+        <button onclick="addText('diffx(')" class="operator fn-btn"title="Use '=Calc' for calculus, this is a derivative d^n/dx^n(f(x)) at x = C = diffx(f(x),n,C)">d<sup>n</sup>/dx<sup>n</sup></button>
+        <button onclick="addText('fnIntx(')" class="operator fn-btn"title="Use '=Calc' for calculus, this is a integral a_∫^b(f(x))dx=fnInt(a,b,f(x))">∫dx</button>
+       <button onclick='addText("\"")' class="operator fn-btn"title='Use "=Calc" for calculus, make sure to do "expression" with double quotes to evaluate for f(x) calculus calculations'>"</button>
+        <button onclick='addText("x")'title="Use '=Calc' for calculus, x is our primary use for calculus calculations">x</button>
+        <button onclick="evalCalc()" class="operator fn-btn" title="This evaluates only calculus stuff">=Calc</button>
+    </div>
+</div>
+
+<script>
+    let ans = 0;
+    let dx = 1e-6;
+    const display = document.getElementById('display');
+    function abs(x) { return x < 0 ? -x : x; }
+    function addText(t) { display.innerHTML += t; }
+    function clr() { display.innerHTML = ""; }
+    function del() { display.innerHTML = display.innerHTML.slice(0, -1); }
+    // --- Core Math Library ---
+    function Add(x, y) {
+        let i = x.toString().includes(".") ? x.toString().split(".")[1].length : 0;
+        let j = y.toString().includes(".") ? y.toString().split(".")[1].length : 0;
+        let baseNum = Math.pow(10, Math.max(i, j));
+        return (x * baseNum + y * baseNum) / baseNum;
+    }
+
+    function Mult(x, y) {
+        let i = x.toString().includes(".") ? x.toString().split(".")[1].length : 0;
+        let j = y.toString().includes(".") ? y.toString().split(".")[1].length : 0;
+        return (x * Math.pow(10, i)) * (y * Math.pow(10, j)) / Math.pow(10, i + j);
+    }
+
+    function QN(a, b, c) {
+        let d = b * b - 4 * a * c;
+        if (d < 0) return ["EQ: " + a + "x²+" + b + "x+" + c + "=0<br>x: " + (-b / (2 * a)) + " - " + (Math.sqrt(-d) / (2 * a)) + "i" , (-b / (2 * a)) + " - " + (Math.sqrt(-d) / (2 * a)) + "i"];
+        return ["EQ: " + a + "x²+" + b + "x+" + c + "=0<br>x: "+((-b - Math.sqrt(d)) / (2 * a)),((-b - Math.sqrt(d)) / (2 * a))];
+    }
+
+    function QX(a, b, c) {
+        let d = b * b - 4 * a * c;
+        if (d < 0) return ["EQ: " + a + "x²+" + b + "x+" + c + "=0<br>x: " + (-b / (2 * a)) + " + " + (Math.sqrt(-d) / (2 * a)) + "i" , (-b / (2 * a)) + " + " + (Math.sqrt(-d) / (2 * a)) + "i"];
+        return ["EQ: " + a + "x²+" + b + "x+" + c + "=0<br>x: "+((-b + Math.sqrt(d)) / (2 * a)),((-b + Math.sqrt(d)) / (2 * a))];
+    }
+
+    function ENTQUAD(a, b, c) {
+        return "EQ: " + a + "x²+" + b + "x+" + c + "=0<br>x1: " + QX(a,b,c)[1] + "<br>x2: " + QN(a,b,c)[1];
+    }
+
+    const pi = Math.PI, e = Math.E;
+    const π = Math.PI;
+    function sqrt(x) { return Math.sqrt(x); }
+    function ln(x) { return Math.log(x); }
+    function exp(x) { return Math.exp(x); }
+
+    function binary(x) {
+        let F = 1, i = x, j = 0, S = "(X + Y)<sup>" + x + "</sup> = <br>";
+        while (i >= 0) {
+            let FS = (Math.round(F) === 1 && (i !== 0 || j !== 0)) ? "" : Math.round(F);
+            let IS = (i === 0) ? "" : (i === 1 ? "X" : "X<sup>" + i + "</sup> ");
+            let JS = (j === 0) ? "" : (j === 1 ? "Y" : "Y<sup>" + j + "</sup> ");
+            S += FS + IS + JS;
+            F = Mult(F, i / (j + 1));
+            i--; j++;
+            if (i >= 0) S += " <br>+ ";
+        }
+        return S;
+    }
+
+    // --- Parser Engine ---
+    function PEMDAS(expr) {
+        const tokens = expr.replace(/\s+/g, '').match(/([0-9.]+|[a-z_]+|[+\-*/^(),])/gi);
+        let idx = 0;
+
+        function parseExpr() {
+            let nodes = [parsePrimary()];
+            while (idx < tokens.length && "+-*/^".includes(tokens[idx])) {
+                nodes.push(tokens[idx++], parsePrimary());
+            }
+            return evalTiers(nodes);
+        }
+
+        function parsePrimary() {
+    let t = tokens[idx];
+
+    // --- UNARY PLUS ---
+    if (t === '+') {
+        idx++;
+        return parsePrimary();
+    }
+
+    // --- UNARY MINUS ---
+    if (t === '-') {
+        idx++;
+        return -parsePrimary();
+    }
+
+    // --- Parentheses ---
+    if (t === '(') {
+        idx++;
+        let res = parseExpr();
+        idx++; // skip ')'
+        return res;
+    }
+
+    // --- Constants ---
+    if (t === 'pi') { idx++; return pi; }
+    if (t === 'e')  { idx++; return e; }
+
+    // --- Functions ---
+    if (isNaN(t) && !"+-*/^(),".includes(t)) {
+        let fnName = t;
+        idx++; // skip function name
+        idx++; // skip '('
+
+        let args = [];
+        while (idx < tokens.length && tokens[idx] !== ')') {
+            args.push(parseExpr());
+            if (tokens[idx] === ',') idx++;
+        }
+        idx++; // skip ')'
+        return execFn(fnName, args);
+    }
+
+    // --- Numbers ---
+    idx++;
+    return parseFloat(t);
+}
+
+        function execFn(name, args) {
+            const map = {
+                "Add": Add, "Mult": Mult, "sqrt": sqrt, "ln": ln, "exp": exp,
+                "floor": Math.floor, "ceil": Math.ceil, "round": Math.round,
+                "Quadmin": QN, "Quadmax": QX, "ENTQUAD": ENTQUAD,"abs":Math.abs,
+                "cos":Math.cos, "sin":Math.sin, "tan":Math.tan,
+                "sec":(x)=>1/Math.cos(x), "csc":(x)=>1/Math.sin(x)
+                , "cot":(x)=>1/Math.tan(x),
+                "acos":Math.acos, "asin":Math.asin, "atan":Math.atan,
+                "asec":(x)=>Math.acos(1/x), "acsc":(x)=>Math.asin(1/x)
+                , "acot":(x)=>Math.atan(1/x),
+                "log10":(x)=>Math.log10(x),
+                "log":(x,b)=>Math.log(x)/Math.log(b),
+                "cosh":Math.cosh, "sinh":Math.sinh, "tanh":Math.tanh,
+                "sech":(x)=>1/Math.cosh(x), "csch":(x)=>1/Math.sinh(x)
+                , "coth":(x)=>1/Math.tanh(x),
+                "acosh":Math.acosh, "asinh":Math.asinh, "atanh":Math.atanh,
+                "asech":(x)=>Math.acosh(1/x), "acsch":(x)=>Math.asinh(1/x)
+                , "acoth":(x)=>Math.atanh(1/x)
+            };
+            return map[name] ? map[name](...args) : 0;
+        }
+
+        function evalTiers(nodes) {
+            for (let j = nodes.length - 2; j > 0; j -= 2) {
+    if (nodes[j] === '^') {
+        nodes.splice(j - 1, 3, Math.pow(nodes[j - 1], nodes[j + 1]));
+    }
+}
+
+            for (let j = 1; j < nodes.length; j += 2) {
+                if ("*/".includes(nodes[j])) {
+                    // Inside evalTiers for loop for "*/"
+if (nodes[j] === '/') {
+    if (nodes[j+1] === 0) {
+        return "Div by Zero Error"; // Immediate exit for safety
+    }
+}
+                    let res = nodes[j] === '*' ? Mult(nodes[j-1], nodes[j+1]) : Mult(nodes[j-1], 1/nodes[j+1]);
+                    nodes.splice(j-1, 3, res);
+                    j -= 2;
+                }
+            }
+            let total = nodes[0];
+            for (let j = 1; j < nodes.length; j += 2) {
+                if (nodes[j] === '+') total = Add(total, nodes[j+1]);
+                if (nodes[j] === '-') total = Add(total, -nodes[j+1]);
+            }
+            return total;
+        }
+
+        let finalResult = parseExpr();
+
+// Final Logic Gate
+if (finalResult === "Div by Zero Error" || finalResult === "Domain Error") {
+    return finalResult;
+}
+if (!isFinite(finalResult)) {
+    return "Overflow Error"; // Handles numbers too large for JS
+}
+        // Final Formatting for the Screen
+        if (!isFinite(finalResult)) return "Error";
+        if (typeof finalResult === "number") {
+            if (Math.abs(finalResult) >= 1e21) {
+                let p = finalResult.toString().split("e+");
+                return p[0] + " × 10<sup>" + p[1] + "</sup>";
+            }
+            ans = finalResult;
+        }
+        return expr + " = " + finalResult;
+    }
+
+    function solve() {
+        try {
+            let expr = display.innerHTML.replace(/ans/g, ans);
+            expr = expr.replace(/\|([^|]+)\|/g, "abs($1)");
+            display.innerHTML = PEMDAS(expr);
+        } catch(e) { display.innerHTML = "Error"; }
+    }
+    function solveAlg() {
+    try {
+        let content = display.innerHTML;
+        // Extract what is inside the parentheses
+        let inner = content.match(/\(([^)]+)\)/)[1]; 
+        let args = inner.split(",").map(item => parseFloat(item.trim()));
+
+        if (content.includes("ENTQUAD")) {
+            display.innerHTML = ENTQUAD(args[0], args[1], args[2]);
+        } else if (content.includes("Quadmax")) {
+            display.innerHTML = QX(args[0], args[1], args[2])[0];
+        } else if (content.includes("Quadmin")) {
+            display.innerHTML = QN(args[0], args[1], args[2])[0];
+        }
+    } catch(e) { 
+        display.innerHTML = "Error: Invalid Format"; 
+    }
+}
+    function solveBinomial() {
+        try {
+            let n = parseInt(display.innerHTML.replace(/ans/g, ans));
+            display.innerHTML = binary(n);
+        } catch(e) { display.innerHTML = "Error: Enter N"; }
+    }
+    function diffx(expr, n, xValue) {
+    const dx = 1e-3; // Small step
+    let Sum = 0;
+    let i = 0;
+    let F = 1; // This acts as the Binomial Coefficient (n choose i)
+
+    while (i <= n) {
+        // Replace 'x' with the specific shifted value
+        let shiftedX = xValue + (n - i) * dx;
+        let term = PEMDAS(expr.replace(/x/g, `(${shiftedX})`));
+        
+        if (i % 2 === 1) term = -term;
+        
+        Sum = Add(Sum, Mult(F, term));
+        
+        // Update Binomial Coefficient for next iteration: nCi -> nC(i+1)
+        F = F * (n - i) / (i + 1);
+        i++;
+    }
+    // Final result must be divided by dx^n
+    return Sum / Math.pow(dx, n);
+}
+
+function fnIntx(a, b, expr) {
+    const steps = 1000; 
+    const h = (b - a) / steps; 
+    let total = 0;
+    
+    for (let i = 0; i <= steps; i++) {
+        let currentX = a + (i * h);
+        let val = parseFloat(PEMDAS(expr.replace(/x/g, `(${currentX})`)));
+        
+        // Trapezoidal rule: first and last terms are halved
+        if (i === 0 || i === steps) {
+            total = Add(total, val / 2);
+        } else {
+            total = Add(total, val);
+        }
+    }
+    return Mult(total, h);
+}
+    function evalCalc() {
+    try {
+        let expr = display.innerHTML.toLowerCase().replace(/ans/g, ans);
+        
+        // Handle Differentiation: diffx(expression, order, xValue)
+        expr = expr.replace(/diffx\(([^,]+),([^,]+),([^)]+)\)/g, (match, e, n, x) => {
+            return "d<sup>"+ n + "</sup>/dx<sup>"+ n + "</sup>(" + e + ") = " + diffx(e, parseFloat(PEMDAS(n)), parseFloat(PEMDAS(x)));
+        });
+
+        // Handle Integration: fnintx(a, b, expression)
+        expr = expr.replace(/fnintx\(([^,]+),([^,]+),([^)]+)\)/g, (match, a, b, e) => {
+            return "<sub>" + parseFloat(PEMDAS(a)) + "</sub> ∫<sup>"+ parseFloat(PEMDAS(b)) + "</sup>("+e+")dx = " + fnIntx(parseFloat(PEMDAS(a)), parseFloat(PEMDAS(b)), e);
+        });
+        display.innerHTML = expr;
+    } catch(e) { 
+        display.innerHTML = "Error"; 
+    }
+}
+function float(str) {
+    return parseFloat(str) || 0;
+}
+function DTR(x) {
+    // Extract only numbers and decimals from the string
+    const prev = x;
+    const match = x.match(/[-+]?[0-9]*\.?[0-9]+/);
+    if (!match) return; 
+
+    const val = float(match[0]);
+    let rad = Mult(Mult(val, pi), 1 / 180);
+    
+    // We update the display with the result
+    display.innerHTML = `${prev}° = ${rad} rad`;
+}
+
+function RTD(x) {
+    const prev = x;
+    const match = x.match(/[-+]?[0-9]*\.?[0-9]+/);
+    if (!match) return;
+
+    const val = float(match[0]);
+    let deg = Mult(Mult(val, 180), 1 / pi);
+    
+    display.innerHTML = `${prev} rad = ${deg}°`;
+}
+</script>
+
+</body>
+</html>
